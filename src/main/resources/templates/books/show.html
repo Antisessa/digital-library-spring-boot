@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Show</title>
+</head>
+<body>
+
+<h1 th:text="${book.getName() + ', ' + book.getYearOfPublication()}"></h1>
+
+<h2 th:text="${'Author: ' + book.getAuthor()}">Author name of this book</h2>
+
+<p th:text="${'This book is ' + book.getStatus()}">Book status</p>
+
+<!--Если книга свободна, предлагается выбор кому ее присвоить -->
+<form th:method="PATCH"
+      th:action="@{/books/setOwner/{id}(id=${book.getId()})}"
+      th:if="${book.getOwner() == null}">
+
+    <label for="person">Выберите человека</label>
+    <select th:object="${person}" th:field="*{id}" id="person">
+        <option th:each="person : ${people}"
+                th:value="${person.getId()}"
+                th:text="${person.getName() + ', ' + person.getAge()}"></option>
+    </select>
+
+    <input type="submit" value="Выдать книгу этому человеку"/>
+</form>
+
+<!--Если человек занята, показывается владелец и кнопка для возврата книги-->
+<div th:text="'Owner of this book is:'" th:if="${book.getOwner() != null}">Owner</div>
+
+<a th:href="@{/people/{id}(id=${book.getOwner().getId()})}"
+   th:text="${book.getOwner().getName()}"
+   th:if="${book.getOwner() != null}">view</a>
+<br/>
+
+<form th:method="DELETE"
+      th:action="@{/books/deleteOwner/{id}(id=${book.getId()})}"
+      th:if="${book.getOwner() != null}">
+    <input type="submit" value="Return this book"/>
+</form>
+
+<!--Back, edit and delete buttons-->
+<hr/>
+<a th:href="@{/books/{id}/edit(id=${book.getId()})}">Edit this book</a>
+
+<form th:method="DELETE" th:action="@{/books/{id}(id=${book.getId()})}">
+    <input type="submit" value="Delete this book"/>
+</form>
+
+<br/>
+<hr/>
+<a href="/books"><strong>Back to bookshelf</strong></a>
+
+</body>
+</html>

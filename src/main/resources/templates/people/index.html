@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>People List</title>
+</head>
+<body>
+<h1> Добро пожаловать в цифровую библиотеку</h1>
+<h2 th:text="'Всего в системе ' + ${people.size()} + ' человек(-а)'">количество людей</h2>
+
+<!--тег div в котором th each проходится по всем Людям из people-->
+<!--    th href готовит ссылку на человека формата /people/id -->
+<!--       + текст ссылки формата ФИО, кол-во взятых книг-->
+<div th:each = "person : ${people}">
+    <a th:href="@{/people/{id}(id=${person.getId()})}"
+       th:text="${person.getName() + ', ' + person.getAge()}">user</a>
+</div>
+
+<br/>
+<hr/>
+
+<form action="/people/new">
+    <input type="submit" value="Создать нового пользователя"/>
+</form>
+
+<form action="/books">
+    <input type="submit" value="Перейти к книжной полке"/>
+</form>
+
+</body>
+</html>

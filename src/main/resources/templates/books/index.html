@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Bookshelf</title>
+</head>
+<body>
+<h1> Добро пожаловать в цифровую библиотеку</h1>
+<h2 th:text="'Всего на полке ' + ${allBooks.size()} + ' книг(-и,-а)'">количество книг</h2>
+
+<h3>Критерии отображения книг на полке</h3>
+<form th:action="@{/books}">
+    <label for="itemPerPage"> Книг на странице: </label>
+    <input type="text"
+           id="itemPerPage"
+           name="itemPerPage"
+           th:value="${itemPerPage}"
+           th:name="itemPerPage"><br>
+
+    <label for="page"> Страница поиска: </label>
+    <input type="text"
+           id="page"
+           name="page"
+           th:value="${page}"
+           th:name="page"><br>
+
+    <input type="checkbox"
+           id="sort"
+           name="sort"
+           value="true"
+           th:name="sort_by_year"
+           checked>
+    <label for="sort"> Отсортировать список?</label> <br/>
+    <input type="submit" value="Отобразить результат"/>
+</form>
+
+<br/>
+<form action="/books/search">
+    <input type="submit" value="Страница поиска книги по названию"/>
+</form>
+
+<br/>
+<hr/>
+<div th:each="book : ${books}">
+  <a th:href="@{/books/{id}(id=${book.getId()})}"
+     th:style="${book.isExpire() ? 'color:red' : 'color:black'}"
+     th:text="${book.getName() + ', ' + book.getAuthor() + ', ' + book.getYearOfPublication()}">book</a>
+</div>
+
+<br/>
+<hr/>
+
+<form action="/books/new">
+    <input type="submit" value="Добавить новую книгу"/>
+</form>
+
+<form action="/people">
+    <input type="submit" value="Перейти к списку пользователей"/>
+</form>
+
+</body>
+</html>
