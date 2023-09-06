@@ -96,8 +96,16 @@ public class BookService {
 
     @Transactional
     public void update(int id, Book updatedBook) {
-        updatedBook.setId(id);
-        booksRepository.save(updatedBook);
+        Optional<Book> oldBookOptional = booksRepository.findById(id);
+        if(oldBookOptional.isPresent()) {
+            Book oldBook = oldBookOptional.get();
+            updatedBook.setOwner(oldBook.getOwner());
+            updatedBook.setDateOfTaking(oldBook.getDateOfTaking());
+            updatedBook.setStatus(oldBook.getStatus());
+            updatedBook.setReturnDate(oldBook.getReturnDate());
+            updatedBook.setId(id);
+            booksRepository.save(updatedBook);
+        }
     }
 
     @Transactional
